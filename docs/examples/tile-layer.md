@@ -16,7 +16,7 @@ sidebar_position: 3
   title="Mapjar 瓦片图层示例"
 ></iframe>
 
-[在新窗口打开](/examples/tile-layer.html)
+<a href="/examples/tile-layer.html" target="_blank" rel="noopener noreferrer">在新窗口打开 ↗</a>
 
 ## 多种瓦片源
 

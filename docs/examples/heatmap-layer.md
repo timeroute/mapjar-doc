@@ -16,7 +16,7 @@ sidebar_position: 8
   title="Mapjar 热力图层示例"
 ></iframe>
 
-[在新窗口打开](/examples/heatmap-layer.html)
+<a href="/examples/heatmap-layer.html" target="_blank" rel="noopener noreferrer">在新窗口打开 ↗</a>
 
 ## 基本用法
 

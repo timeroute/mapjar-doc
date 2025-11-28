@@ -16,7 +16,7 @@ sidebar_position: 6
   title="Mapjar 图像图层示例"
 ></iframe>
 
-[在新窗口打开](/examples/image-layer.html)
+<a href="/examples/image-layer.html" target="_blank" rel="noopener noreferrer">在新窗口打开 ↗</a>
 
 ## 基本用法
 

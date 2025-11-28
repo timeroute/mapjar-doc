@@ -4,162 +4,166 @@
 // There are various equivalent ways to declare your Docusaurus config.
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
-import {themes as prismThemes} from 'prism-react-renderer';
+import { themes as prismThemes } from "prism-react-renderer";
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Mapjar',
-  tagline: '基于 WebGL2 的高性能地图渲染引擎',
-  favicon: 'img/map.png',
+	title: "Mapjar",
+	tagline: "基于 WebGL2 的高性能地图渲染引擎",
+	favicon: "img/map.png",
 
-  // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
-  future: {
-    v4: true, // Improve compatibility with the upcoming Docusaurus v4
-  },
+	// Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
+	future: {
+		v4: true, // Improve compatibility with the upcoming Docusaurus v4
+	},
 
-  // Set the production url of your site here
-  url: 'https://mapjar-doc.netlify.app',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+	// Set the production url of your site here
+	url: "https://mapjar-doc.netlify.app",
+	// Set the /<baseUrl>/ pathname under which your site is served
+	// For GitHub pages deployment, it is often '/<projectName>/'
+	baseUrl: "/",
 
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+	// GitHub pages deployment config.
+	// If you aren't using GitHub pages, you don't need these.
+	organizationName: "facebook", // Usually your GitHub org/user name.
+	projectName: "docusaurus", // Usually your repo name.
 
-  onBrokenLinks: 'throw',
+	onBrokenLinks: "throw",
+	onBrokenMarkdownLinks: "warn",
 
-  // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
-  i18n: {
-    defaultLocale: 'zh-Hans',
-    locales: ['zh-Hans'],
-  },
+	// 静态目录配置
+	staticDirectories: ["static"],
 
-  presets: [
-    [
-      'classic',
-      /** @type {import('@docusaurus/preset-classic').Options} */
-      ({
-        docs: {
-          sidebarPath: './sidebars.js',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
-        theme: {
-          customCss: './src/css/custom.css',
-        },
-      }),
-    ],
-  ],
+	// Even if you don't use internationalization, you can use this field to set
+	// useful metadata like html lang. For example, if your site is Chinese, you
+	// may want to replace "en" with "zh-Hans".
+	i18n: {
+		defaultLocale: "zh-Hans",
+		locales: ["zh-Hans"],
+	},
 
-  themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
-    ({
-      // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
-      colorMode: {
-        respectPrefersColorScheme: true,
-      },
-      navbar: {
-        title: 'Mapjar',
-        logo: {
-          alt: 'Mapjar Logo',
-          src: 'img/map.png',
-        },
-        items: [
-          {
-            type: 'docSidebar',
-            sidebarId: 'docsSidebar',
-            position: 'left',
-            label: '文档',
-          },
-          {
-            type: 'docSidebar',
-            sidebarId: 'apiSidebar',
-            position: 'left',
-            label: 'API',
-          },
-          {
-            type: 'docSidebar',
-            sidebarId: 'examplesSidebar',
-            position: 'left',
-            label: '示例',
-          },
-          // {
-          //   href: 'https://github.com/yourusername/mapjar',
-          //   label: 'GitHub',
-          //   position: 'right',
-          // },
-        ],
-      },
-      footer: {
-        style: 'dark',
-        links: [
-          {
-            title: '文档',
-            items: [
-              {
-                label: '快速开始',
-                to: '/docs/getting-started',
-              },
-              {
-                label: 'API 参考',
-                to: '/docs/api/map-engine',
-              },
-            ],
-          },
-          {
-            title: '资源',
-            items: [
-              {
-                label: '示例',
-                to: '/docs/examples/basic',
-              },
-              // {
-              //   label: 'GitHub',
-              //   href: 'https://github.com/yourusername/mapjar',
-              // },
-            ],
-          },
-          {
-            title: '更多',
-            items: [
-              {
-                label: 'NPM',
-                href: 'https://www.npmjs.com/package/mapjar',
-              },
-            ],
-          },
-        ],
-        copyright: `Copyright © ${new Date().getFullYear()} Mapjar. Built with Docusaurus.`,
-      },
-      prism: {
-        theme: prismThemes.github,
-        darkTheme: prismThemes.dracula,
-      },
-    }),
+	presets: [
+		[
+			"classic",
+			/** @type {import('@docusaurus/preset-classic').Options} */
+			({
+				docs: {
+					sidebarPath: "./sidebars.js",
+					// Please change this to your repo.
+					// Remove this to remove the "edit this page" links.
+					editUrl:
+						"https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+				},
+				blog: {
+					showReadingTime: true,
+					feedOptions: {
+						type: ["rss", "atom"],
+						xslt: true,
+					},
+					// Please change this to your repo.
+					// Remove this to remove the "edit this page" links.
+					editUrl:
+						"https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+					// Useful options to enforce blogging best practices
+					onInlineTags: "warn",
+					onInlineAuthors: "warn",
+					onUntruncatedBlogPosts: "warn",
+				},
+				theme: {
+					customCss: "./src/css/custom.css",
+				},
+			}),
+		],
+	],
+
+	themeConfig:
+		/** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+		({
+			// Replace with your project's social card
+			image: "img/docusaurus-social-card.jpg",
+			colorMode: {
+				respectPrefersColorScheme: true,
+			},
+			navbar: {
+				title: "Mapjar",
+				logo: {
+					alt: "Mapjar Logo",
+					src: "img/map.png",
+				},
+				items: [
+					{
+						type: "docSidebar",
+						sidebarId: "docsSidebar",
+						position: "left",
+						label: "文档",
+					},
+					{
+						type: "docSidebar",
+						sidebarId: "apiSidebar",
+						position: "left",
+						label: "API",
+					},
+					{
+						type: "docSidebar",
+						sidebarId: "examplesSidebar",
+						position: "left",
+						label: "示例",
+					},
+					// {
+					//   href: 'https://github.com/yourusername/mapjar',
+					//   label: 'GitHub',
+					//   position: 'right',
+					// },
+				],
+			},
+			footer: {
+				style: "dark",
+				links: [
+					{
+						title: "文档",
+						items: [
+							{
+								label: "快速开始",
+								to: "/docs/getting-started",
+							},
+							{
+								label: "API 参考",
+								to: "/docs/api/map-engine",
+							},
+						],
+					},
+					{
+						title: "资源",
+						items: [
+							{
+								label: "示例",
+								to: "/docs/examples/basic",
+							},
+							// {
+							//   label: 'GitHub',
+							//   href: 'https://github.com/yourusername/mapjar',
+							// },
+						],
+					},
+					{
+						title: "更多",
+						items: [
+							{
+								label: "NPM",
+								href: "https://www.npmjs.com/package/mapjar",
+							},
+						],
+					},
+				],
+				copyright: `Copyright © ${new Date().getFullYear()} Mapjar. Built with Docusaurus.`,
+			},
+			prism: {
+				theme: prismThemes.github,
+				darkTheme: prismThemes.dracula,
+			},
+		}),
 };
 
 export default config;

@@ -16,7 +16,7 @@ sidebar_position: 9
   title="Mapjar 覆盖层图层示例"
 ></iframe>
 
-[在新窗口打开](/examples/overlay-layer.html)
+<a href="/examples/overlay-layer.html" target="_blank" rel="noopener noreferrer">在新窗口打开 ↗</a>
 
 ## 基本用法
 

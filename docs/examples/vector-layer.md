@@ -16,7 +16,7 @@ sidebar_position: 4
   title="Mapjar 矢量图层示例"
 ></iframe>
 
-[在新窗口打开](/examples/vector-layer.html)
+<a href="/examples/vector-layer.html" target="_blank" rel="noopener noreferrer">在新窗口打开 ↗</a>
 
 ## 添加要素
 

@@ -16,7 +16,7 @@ sidebar_position: 7
   title="Mapjar 风场图层示例"
 ></iframe>
 
-[在新窗口打开](/examples/wind-layer.html)
+<a href="/examples/wind-layer.html" target="_blank" rel="noopener noreferrer">在新窗口打开 ↗</a>
 
 ## 基本用法
 

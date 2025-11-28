@@ -16,7 +16,7 @@ sidebar_position: 5
   title="Mapjar GeoJSON 图层示例"
 ></iframe>
 
-[在新窗口打开](/examples/geojson-layer.html)
+<a href="/examples/geojson-layer.html" target="_blank" rel="noopener noreferrer">在新窗口打开 ↗</a>
 
 ## 从 URL 加载
 

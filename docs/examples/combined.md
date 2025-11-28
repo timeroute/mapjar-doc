@@ -14,7 +14,7 @@ sidebar_position: 10
   title="Mapjar 综合示例"
 ></iframe>
 
-[在新窗口打开](/examples/combined.html)
+<a href="/examples/combined.html" target="_blank" rel="noopener noreferrer">在新窗口打开 ↗</a>
 
 ## 功能特性
 
