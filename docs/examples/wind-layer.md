@@ -8,6 +8,16 @@ sidebar_position: 7
 
 完整的风场图层文档请参考 [风场图层](../layers/wind-layer)。
 
+## 在线演示
+
+<iframe 
+  src="/examples/wind-layer.html" 
+  style={{width: '100%', height: '500px', border: '1px solid #ddd', borderRadius: '4px'}}
+  title="Mapjar 风场图层示例"
+></iframe>
+
+[在新窗口打开](/examples/wind-layer.html)
+
 ## 基本用法
 
 ```typescript

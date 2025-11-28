@@ -8,6 +8,16 @@ sidebar_position: 5
 
 完整的 GeoJSON 图层文档请参考 [GeoJSON 图层](../layers/geojson-layer)。
 
+## 在线演示
+
+<iframe 
+  src="/examples/geojson-layer.html" 
+  style={{width: '100%', height: '500px', border: '1px solid #ddd', borderRadius: '4px'}}
+  title="Mapjar GeoJSON 图层示例"
+></iframe>
+
+[在新窗口打开](/examples/geojson-layer.html)
+
 ## 从 URL 加载
 
 ```typescript

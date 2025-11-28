@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapjar 覆盖层示例</title>
+  <style>
+    body { margin: 0; padding: 0; overflow: hidden; font-family: Arial, sans-serif; }
+    #map { width: 100vw; height: 100vh; }
+    .popup {
+      background: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      min-width: 150px;
+    }
+    .popup h3 { margin: 0 0 5px 0; font-size: 16px; }
+    .popup p { margin: 0; color: #666; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <canvas id="map"></canvas>
+  
+  <script type="module">
+    import { MapEngine, TileLayer, OverlayLayer } from 'https://unpkg.com/mapjar@latest/dist/mapjar.js';
+    
+    const engine = new MapEngine('#map', {
+      center: [116.4074, 39.9042],
+      zoom: 5,
+    });
+    
+    const tileLayer = new TileLayer('base', 'https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+    engine.addLayer(tileLayer);
+    
+    const overlayLayer = new OverlayLayer('overlays');
+    engine.addLayer(overlayLayer);
+    
+    const cities = [
+      { name: '北京', lon: 116.4074, lat: 39.9042, desc: '中国首都' },
+      { name: '上海', lon: 121.4737, lat: 31.2304, desc: '经济中心' },
+      { name: '广州', lon: 113.2644, lat: 23.1291, desc: '南方门户' },
+    ];
+    
+    cities.forEach(city => {
+      const element = document.createElement('div');
+      element.className = 'popup';
+      element.innerHTML = `
+        <h3>${city.name}</h3>
+        <p>${city.desc}</p>
+      `;
+      
+      overlayLayer.addOverlay({
+        id: city.name,
+        element: element,
+        position: {
+          lon: city.lon,
+          lat: city.lat,
+          offset: [0, -20],
+          anchor: [0.5, 1.0],
+        },
+      });
+    });
+  </script>
+</body>
+</html>

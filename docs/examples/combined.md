@@ -6,6 +6,16 @@ sidebar_position: 10
 
 结合多种图层和功能的完整示例。
 
+## 在线演示
+
+<iframe 
+  src="/examples/combined.html" 
+  style={{width: '100%', height: '500px', border: '1px solid #ddd', borderRadius: '4px'}}
+  title="Mapjar 综合示例"
+></iframe>
+
+[在新窗口打开](/examples/combined.html)
+
 ## 功能特性
 
 - 多图层管理

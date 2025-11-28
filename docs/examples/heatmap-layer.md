@@ -8,6 +8,16 @@ sidebar_position: 8
 
 完整的热力图层文档请参考 [热力图层](../layers/heatmap-layer)。
 
+## 在线演示
+
+<iframe 
+  src="/examples/heatmap-layer.html" 
+  style={{width: '100%', height: '500px', border: '1px solid #ddd', borderRadius: '4px'}}
+  title="Mapjar 热力图层示例"
+></iframe>
+
+[在新窗口打开](/examples/heatmap-layer.html)
+
 ## 基本用法
 
 ```typescript

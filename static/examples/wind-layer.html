@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapjar 风场图层示例</title>
+  <style>
+    body { margin: 0; padding: 0; overflow: hidden; font-family: Arial, sans-serif; }
+    #map { width: 100vw; height: 100vh; }
+    #info {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 12px 15px;
+      border-radius: 4px;
+      z-index: 1000;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    #info strong { font-size: 15px; }
+    #loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 20px 30px;
+      border-radius: 8px;
+      z-index: 2000;
+      font-size: 16px;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <canvas id="map"></canvas>
+  <div id="loading">加载 GFS 全球风场数据...</div>
+  <div id="info">
+    <strong>全球风场图层</strong>
+    <div style="margin-top: 5px; color: #aaa;">数据源: NOAA GFS</div>
+    <div style="color: #aaa;">日期: 2016-11-20 00:00 UTC</div>
+    <div style="margin-top: 8px; color: #fff;">分辨率: 360×180 (1°)</div>
+  </div>
+  
+  <script type="module">
+    import { MapEngine, TileLayer, WindLayer } from 'https://unpkg.com/mapjar@latest/dist/mapjar.js';
+    
+    const engine = new MapEngine('#map', {
+      center: [0, 20],
+      zoom: 2,
+    });
+    
+    const tileLayer = new TileLayer('base', 'https://cartodb-basemaps-a.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png');
+    engine.addLayer(tileLayer);
+    
+    const windLayer = new WindLayer('wind', {
+      particleCount: 80000,
+      particleAge: 240,
+      speedFactor: 0.3,
+      fadeOpacity: 0.98,
+      colorRamp: [
+        // '#ffffff',
+        '#3288bd',
+        '#66c2a5',
+        '#abdda4',
+        '#e6f598',
+        '#fee08b',
+        '#fdae61',
+        '#f46d43',
+        '#d53e4f',
+      ],
+    });
+    
+    // GFS 数据元信息
+    const metadata = {
+      source: "http://nomads.ncep.noaa.gov",
+      date: "2016-11-20T00:00Z",
+      width: 360,
+      height: 180,
+      uMin: -21.32,
+      uMax: 26.8,
+      vMin: -21.57,
+      vMax: 21.42
+    };
+    
+    // 加载 GFS 风场数据
+    async function loadWindData() {
+      const imageUrl = 'https://raw.githubusercontent.com/mapbox/webgl-wind/refs/heads/master/demo/wind/2016112000.png';
+      
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      
+      return new Promise((resolve, reject) => {
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = metadata.width;
+          canvas.height = metadata.height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          
+          const imageData = ctx.getImageData(0, 0, metadata.width, metadata.height);
+          const pixels = imageData.data;
+          
+          // 解码 UV 数据
+          const uv = new Float32Array(metadata.width * metadata.height * 2);
+          
+          for (let i = 0; i < pixels.length / 4; i++) {
+            const r = pixels[i * 4];
+            const g = pixels[i * 4 + 1];
+            const b = pixels[i * 4 + 2];
+            
+            // 从 RGB 解码 U 和 V 分量
+            const u = (r / 255.0) * (metadata.uMax - metadata.uMin) + metadata.uMin;
+            const v = (g / 255.0) * (metadata.vMax - metadata.vMin) + metadata.vMin;
+            
+            uv[i * 2] = u;
+            uv[i * 2 + 1] = v;
+          }
+          
+          resolve(uv);
+        };
+        
+        img.onerror = reject;
+        img.src = imageUrl;
+      });
+    }
+    
+    // 重投影：从等经纬度网格重采样为适配 Web Mercator 渲染的网格
+    function reprojectToMercator(sourceUV, sourceWidth, sourceHeight) {
+      const targetWidth = sourceWidth;
+      const targetHeight = sourceHeight;
+      const targetUV = new Float32Array(targetWidth * targetHeight * 2);
+      
+      // Web Mercator 的纬度范围
+      const maxLat = 85.0511;
+      const minLat = -85.0511;
+      
+      for (let y = 0; y < targetHeight; y++) {
+        for (let x = 0; x < targetWidth; x++) {
+          // 目标网格中，y 方向在 Web Mercator 投影空间中均匀分布
+          // 需要将其转换回对应的纬度
+          const mercatorY = 1.0 - (y / (targetHeight - 1)); // 0 到 1，从南到北
+          
+          // Web Mercator Y 转纬度
+          const latRad = Math.atan(Math.sinh(Math.PI * (1 - 2 * mercatorY)));
+          const lat = latRad * 180 / Math.PI;
+          
+          // 经度保持线性
+          const lon = -180 + (x / (targetWidth - 1)) * 360;
+          
+          // 在源数据（等经纬度网格）中查找对应位置
+          const sourceX = ((lon + 180) / 360) * (sourceWidth - 1);
+          const sourceY = ((90 - lat) / 180) * (sourceHeight - 1);
+          
+          // 边界检查
+          if (sourceX < 0 || sourceX >= sourceWidth - 1 || 
+              sourceY < 0 || sourceY >= sourceHeight - 1) {
+            targetUV[(y * targetWidth + x) * 2] = 0;
+            targetUV[(y * targetWidth + x) * 2 + 1] = 0;
+            continue;
+          }
+          
+          // 双线性插值
+          const x0 = Math.floor(sourceX);
+          const x1 = Math.ceil(sourceX);
+          const y0 = Math.floor(sourceY);
+          const y1 = Math.ceil(sourceY);
+          
+          const fx = sourceX - x0;
+          const fy = sourceY - y0;
+          
+          // 插值 U 分量
+          const u00 = sourceUV[(y0 * sourceWidth + x0) * 2];
+          const u10 = sourceUV[(y0 * sourceWidth + x1) * 2];
+          const u01 = sourceUV[(y1 * sourceWidth + x0) * 2];
+          const u11 = sourceUV[(y1 * sourceWidth + x1) * 2];
+          
+          const u = (1 - fx) * (1 - fy) * u00 +
+                    fx * (1 - fy) * u10 +
+                    (1 - fx) * fy * u01 +
+                    fx * fy * u11;
+          
+          // 插值 V 分量
+          const v00 = sourceUV[(y0 * sourceWidth + x0) * 2 + 1];
+          const v10 = sourceUV[(y0 * sourceWidth + x1) * 2 + 1];
+          const v01 = sourceUV[(y1 * sourceWidth + x0) * 2 + 1];
+          const v11 = sourceUV[(y1 * sourceWidth + x1) * 2 + 1];
+          
+          const v = (1 - fx) * (1 - fy) * v00 +
+                    fx * (1 - fy) * v10 +
+                    (1 - fx) * fy * v01 +
+                    fx * fy * v11;
+          
+          targetUV[(y * targetWidth + x) * 2] = u;
+          targetUV[(y * targetWidth + x) * 2 + 1] = v;
+        }
+      }
+      
+      return targetUV;
+    }
+    
+    // 初始化风场图层
+    loadWindData().then(uv => {
+      // 重投影数据以适配 Web Mercator 渲染
+      const reprojectedUV = reprojectToMercator(uv, metadata.width, metadata.height);
+      
+      windLayer.setData({
+        uv: reprojectedUV,
+        width: metadata.width,
+        height: metadata.height,
+        minU: metadata.uMin,
+        maxU: metadata.uMax,
+        minV: metadata.vMin,
+        maxV: metadata.vMax,
+        bounds: {
+          minLon: -180,
+          minLat: -90,
+          maxLon: 180,
+          maxLat: 90,
+        },
+      });
+      
+      engine.addLayer(windLayer);
+      document.getElementById('loading').classList.add('hidden');
+    }).catch(error => {
+      console.error('加载风场数据失败:', error);
+      document.getElementById('loading').textContent = '加载失败，请刷新重试';
+    });
+  </script>
+</body>
+</html>

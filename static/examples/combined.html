@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapjar 综合示例</title>
+  <style>
+    body { margin: 0; padding: 0; overflow: hidden; font-family: Arial, sans-serif; }
+    #map { width: 100vw; height: 100vh; }
+    #controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: white;
+      padding: 10px;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      z-index: 1000;
+      max-width: 200px;
+    }
+    .control-group {
+      margin: 10px 0;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .control-group:last-child { border-bottom: none; }
+    label {
+      display: flex;
+      align-items: center;
+      margin: 5px 0;
+      cursor: pointer;
+    }
+    input[type="checkbox"] { margin-right: 8px; }
+    button {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border: none;
+      border-radius: 4px;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+  <canvas id="map"></canvas>
+  <div id="controls">
+    <strong>图层控制</strong>
+    <div class="control-group">
+      <label>
+        <input type="checkbox" id="vectorToggle" checked>
+        矢量图层
+      </label>
+      <label>
+        <input type="checkbox" id="overlayToggle" checked>
+        覆盖层
+      </label>
+    </div>
+    <div class="control-group">
+      <button onclick="switchBaseMap('osm')">标准地图</button>
+      <button onclick="switchBaseMap('dark')">暗色地图</button>
+    </div>
+  </div>
+  
+  <script type="module">
+    import { MapEngine, TileLayer, VectorLayer, OverlayLayer } from 'https://unpkg.com/mapjar@latest/dist/mapjar.js';
+    
+    const engine = new MapEngine('#map', {
+      center: [116.4074, 39.9042],
+      zoom: 5,
+      enableRotation: true,
+    });
+    
+    // 底图
+    let baseLayer = new TileLayer('base', 'https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+    baseLayer.setZIndex(0);
+    engine.addLayer(baseLayer);
+    
+    // 矢量图层
+    const vectorLayer = new VectorLayer('vector', {
+      fillColor: [0.2, 0.6, 1.0, 0.4],
+      strokeColor: [0.0, 0.4, 0.8, 1.0],
+      strokeWidth: 2.0,
+      pointSize: 10.0,
+      textField: 'name',
+      textFont: '14px Arial',
+    });
+    vectorLayer.setZIndex(10);
+    engine.addLayer(vectorLayer);
+    
+    const cities = [
+      { name: '北京', lon: 116.4074, lat: 39.9042 },
+      { name: '上海', lon: 121.4737, lat: 31.2304 },
+      { name: '广州', lon: 113.2644, lat: 23.1291 },
+    ];
+    
+    cities.forEach(city => {
+      vectorLayer.addFeature({
+        type: 'point',
+        coordinates: [city.lon, city.lat],
+        properties: { name: city.name }
+      });
+    });
+    
+    // 覆盖层
+    const overlayLayer = new OverlayLayer('overlays');
+    overlayLayer.setZIndex(20);
+    engine.addLayer(overlayLayer);
+    
+    cities.forEach(city => {
+      const element = document.createElement('div');
+      element.style.cssText = `
+        background: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        font-size: 14px;
+        font-weight: bold;
+      `;
+      element.textContent = city.name;
+      
+      overlayLayer.addOverlay({
+        id: city.name,
+        element: element,
+        position: {
+          lon: city.lon,
+          lat: city.lat,
+          offset: [0, -25],
+          anchor: [0.5, 1.0],
+        },
+      });
+    });
+    
+    // 图层切换
+    document.getElementById('vectorToggle').addEventListener('change', (e) => {
+      vectorLayer.setVisible(e.target.checked);
+    });
+    
+    document.getElementById('overlayToggle').addEventListener('change', (e) => {
+      overlayLayer.setVisible(e.target.checked);
+    });
+    
+    window.switchBaseMap = (type) => {
+      engine.removeLayer('base');
+      
+      const url = type === 'osm' 
+        ? 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+        : 'https://cartodb-basemaps-a.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png';
+      
+      baseLayer = new TileLayer('base', url);
+      baseLayer.setZIndex(0);
+      engine.addLayer(baseLayer);
+    };
+  </script>
+</body>
+</html>

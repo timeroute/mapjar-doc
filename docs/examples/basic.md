@@ -6,6 +6,16 @@ sidebar_position: 2
 
 创建一个简单的地图应用，包含瓦片图层和基本交互。
 
+## 在线演示
+
+<iframe 
+  src="/examples/basic.html" 
+  style={{width: '100%', height: '500px', border: '1px solid #ddd', borderRadius: '4px'}}
+  title="Mapjar 基础示例"
+></iframe>
+
+[在新窗口打开](/examples/basic.html)
+
 ## 完整代码
 
 ```html

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapjar 基础示例</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+    #map {
+      width: 100vw;
+      height: 100vh;
+    }
+    #info {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: white;
+      padding: 10px 15px;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      font-size: 14px;
+      z-index: 1000;
+    }
+    #coords {
+      margin-top: 5px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="map"></canvas>
+  <div id="info">
+    <div>点击地图查看坐标</div>
+    <div id="coords">-</div>
+  </div>
+  
+  <script type="module">
+    import { MapEngine, TileLayer } from 'https://unpkg.com/mapjar@latest/dist/mapjar.js';
+    
+    const engine = new MapEngine('#map', {
+      center: [116.4074, 39.9042],
+      zoom: 10,
+      enableRotation: true,
+    });
+    
+    const tileLayer = new TileLayer(
+      'osm',
+      'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {
+        tileScale: 1.0,
+        wrapX: true,
+        fadeInDuration: 200,
+      }
+    );
+    engine.addLayer(tileLayer);
+    
+    const coordsDisplay = document.getElementById('coords');
+    
+    engine.on('click', (event) => {
+      const lon = event.lon.toFixed(4);
+      const lat = event.lat.toFixed(4);
+      coordsDisplay.textContent = `经度: ${lon}, 纬度: ${lat}`;
+    });
+    
+    setTimeout(() => {
+      engine.flyTo(121.4737, 31.2304, 12, {
+        duration: 2000,
+      });
+    }, 2000);
+  </script>
+</body>
+</html>

@@ -8,6 +8,16 @@ sidebar_position: 6
 
 完整的图像图层文档请参考 [图像图层](../layers/image-layer)。
 
+## 在线演示
+
+<iframe 
+  src="/examples/image-layer.html" 
+  style={{width: '100%', height: '500px', border: '1px solid #ddd', borderRadius: '4px'}}
+  title="Mapjar 图像图层示例"
+></iframe>
+
+[在新窗口打开](/examples/image-layer.html)
+
 ## 基本用法
 
 ```typescript

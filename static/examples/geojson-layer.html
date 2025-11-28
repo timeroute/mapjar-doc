@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapjar GeoJSON 图层示例</title>
+  <style>
+    body { margin: 0; padding: 0; overflow: hidden; font-family: Arial, sans-serif; }
+    #map { width: 100vw; height: 100vh; }
+    #info {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: white;
+      padding: 10px;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="map"></canvas>
+  <div id="info">
+    <strong>GeoJSON 图层示例</strong>
+    <div style="margin-top: 5px; color: #666;">数据驱动样式</div>
+  </div>
+  
+  <script type="module">
+    import { MapEngine, TileLayer, GeoJSONLayer, StyleFunction } from 'https://unpkg.com/mapjar@latest/dist/mapjar.js';
+    
+    const engine = new MapEngine('#map', {
+      center: [116.4074, 39.9042],
+      zoom: 10,
+    });
+    
+    const tileLayer = new TileLayer('base', 'https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+    engine.addLayer(tileLayer);
+    
+    const geoJSONLayer = new GeoJSONLayer('geojson', {
+      data: {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            geometry: {
+              type: 'Polygon',
+              coordinates: [[
+                [116.2, 39.8],
+                [116.6, 39.8],
+                [116.6, 40.1],
+                [116.2, 40.1],
+                [116.2, 39.8]
+              ]]
+            },
+            properties: { type: 'residential', name: '住宅区' }
+          },
+          {
+            type: 'Feature',
+            geometry: {
+              type: 'Polygon',
+              coordinates: [[
+                [116.3, 39.7],
+                [116.5, 39.7],
+                [116.5, 39.85],
+                [116.3, 39.85],
+                [116.3, 39.7]
+              ]]
+            },
+            properties: { type: 'park', name: '公园' }
+          }
+        ]
+      },
+      style: {
+        fillColor: [0.2, 0.6, 1.0, 0.4],
+        strokeColor: [0.0, 0.4, 0.8, 1.0],
+        strokeWidth: 2.0,
+      }
+    });
+    engine.addLayer(geoJSONLayer);
+  </script>
+</body>
+</html>

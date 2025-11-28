@@ -8,6 +8,16 @@ sidebar_position: 3
 
 完整的瓦片图层文档请参考 [瓦片图层](../layers/tile-layer)。
 
+## 在线演示
+
+<iframe 
+  src="/examples/tile-layer.html" 
+  style={{width: '100%', height: '500px', border: '1px solid #ddd', borderRadius: '4px'}}
+  title="Mapjar 瓦片图层示例"
+></iframe>
+
+[在新窗口打开](/examples/tile-layer.html)
+
 ## 多种瓦片源
 
 ```typescript

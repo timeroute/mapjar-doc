@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapjar 矢量图层示例</title>
+  <style>
+    body { margin: 0; padding: 0; overflow: hidden; font-family: Arial, sans-serif; }
+    #map { width: 100vw; height: 100vh; }
+    #info {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: white;
+      padding: 10px;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      z-index: 1000;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="map"></canvas>
+  <div id="info">
+    <div><strong>矢量图层示例</strong></div>
+    <div style="margin-top: 5px; color: #666;">包含点、线、面要素</div>
+  </div>
+  
+  <script type="module">
+    import { MapEngine, TileLayer, VectorLayer } from 'https://unpkg.com/mapjar@latest/dist/mapjar.js';
+    
+    const engine = new MapEngine('#map', {
+      center: [116.4074, 39.9042],
+      zoom: 6,
+    });
+    
+    const tileLayer = new TileLayer('base', 'https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+    engine.addLayer(tileLayer);
+    
+    const vectorLayer = new VectorLayer('vector', {
+      fillColor: [0.2, 0.6, 1.0, 0.4],
+      strokeColor: [0.0, 0.4, 0.8, 1.0],
+      strokeWidth: 2.0,
+      pointSize: 10.0,
+      textField: 'name',
+      textFont: '14px Arial',
+    });
+    engine.addLayer(vectorLayer);
+    
+    // 添加点
+    vectorLayer.addFeature({
+      type: 'point',
+      coordinates: [116.4074, 39.9042],
+      properties: { name: '北京' }
+    });
+    
+    vectorLayer.addFeature({
+      type: 'point',
+      coordinates: [121.4737, 31.2304],
+      properties: { name: '上海' }
+    });
+    
+    // 添加线
+    vectorLayer.addFeature({
+      type: 'line',
+      coordinates: [
+        [116.4074, 39.9042],
+        [121.4737, 31.2304]
+      ],
+      properties: { name: '路线' }
+    });
+    
+    // 添加面
+    vectorLayer.addFeature({
+      type: 'polygon',
+      coordinates: [[
+        [115.0, 38.0],
+        [118.0, 38.0],
+        [118.0, 41.0],
+        [115.0, 41.0],
+        [115.0, 38.0]
+      ]],
+      properties: { name: '区域' }
+    });
+  </script>
+</body>
+</html>
