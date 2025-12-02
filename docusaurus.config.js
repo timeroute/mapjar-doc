@@ -111,11 +111,16 @@ const config = {
 						position: "left",
 						label: "示例",
 					},
-					// {
-					//   href: 'https://github.com/yourusername/mapjar',
-					//   label: 'GitHub',
-					//   position: 'right',
-					// },
+					{
+						to: "/docs/changelog",
+						position: "left",
+						label: "更新日志",
+					},
+					{
+					  href: 'https://github.com/timeroute/mapjar-doc',
+					  label: 'GitHub',
+					  position: 'right',
+					},
 				],
 			},
 			footer: {
