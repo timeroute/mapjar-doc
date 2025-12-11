@@ -7,6 +7,75 @@ title: 更新日志
 
 记录 Mapjar 的所有重要更新和变更。
 
+## [0.4.3] - 2024-12-11
+
+### 📚 文档更新
+
+#### 在线演示系统 🎯
+- **完整的在线演示**：为所有 9 个示例添加了完整的在线演示功能
+  - 自托管 HTML 文件，加载速度快
+  - 嵌入式 iframe 演示，直接在文档中交互
+  - "在新窗口打开"链接，支持全屏体验
+- **真实数据演示**：
+  - 风场图层使用 NOAA GFS 全球风场数据（2016-11-20）
+  - 热力图层使用相同数据计算全球风速分布
+  - 实现了 EPSG:4326 到 EPSG:3857 的重投影
+- **示例文件**：
+  - `static/examples/basic.html` - 基础地图示例
+  - `static/examples/tile-layer.html` - 瓦片图层示例（带底图切换）
+  - `static/examples/vector-layer.html` - 矢量图层示例
+  - `static/examples/geojson-layer.html` - GeoJSON 图层示例
+  - `static/examples/image-layer.html` - 图像图层示例（带透明度控制）
+  - `static/examples/wind-layer.html` - 风场图层示例（真实 GFS 数据）
+  - `static/examples/heatmap-layer.html` - 热力图层示例（真实风速数据）
+  - `static/examples/overlay-layer.html` - 覆盖层示例
+  - `static/examples/combined.html` - 综合示例（带图层控制）
+
+#### API 文档完善 📖
+- **更新现有文档**：
+  - TileLayer API 文档新增 `retainOldTiles` 相关方法
+  - VectorLayer API 文档新增完整的空间查询方法
+  - OverlayLayer API 文档更新为最新的简化 API
+  - MapEngine API 文档保持最新状态
+- **新增工具类文档**：
+  - `WebGLUtils` - WebGL 工具函数完整文档
+  - `TextRenderer` - 文字渲染工具完整文档  
+  - `Loader` - 资源加载工具完整文档
+  - `ResourceManager` - 资源管理工具完整文档
+  - 更新 API 概览，包含所有最新工具类
+- **文档同步**：确保所有 API 文档与最新的 `index.d.ts` 类型定义保持一致
+
+---
+
+## [0.4.2] - 2024-12-04
+
+### 🐛 Bug 修复
+
+#### TileLayer retainOldTiles 设置修复
+- **问题**：多个 TileLayer 的 `retainOldTiles` 都是 `true`，没有按预期只启用第一个
+- **修复**：
+  1. 将设置逻辑移到 `addLayer` 和 `removeLayer` 方法中
+  2. 改用检查特有方法来判断是否是 TileLayer
+  3. 避免依赖类名，确保打包后也能正常工作
+- **效果**：第一个 TileLayer 的 `retainOldTiles` 为 `true`，其他为 `false`
+
+### ⚡ 性能优化
+
+#### 瓦片加载时拖动流畅度优化 🎯
+- **优化**：
+  - 批量渲染回调：使用 `requestAnimationFrame` 合并多个瓦片的渲染请求
+  - 可见瓦片缓存：相机状态不变时直接返回缓存
+  - 延迟清理：瓦片清理从每帧改为每秒最多一次
+- **效果**：瓦片加载时拖动流畅，减少 50%+ 计算开销
+
+#### 按需渲染性能优化 🚀
+- **优化**：
+  - 添加状态缓存：`isLoading()` 每 100ms 才检查一次
+  - 空闲帧优化：静止 1 秒后，检查频率降低到原来的 1/10
+- **效果**：静止时 CPU 占用从 50% 降至 < 1%
+
+---
+
 ## [0.3.7] - 2024-12-02
 
 ### 重大改进 ✨

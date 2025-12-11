@@ -240,6 +240,73 @@ emitter.emit('event', { message: 'Hello' });
 
 [查看详细文档 →](./utils/event-emitter)
 
+### WebGLUtils
+WebGL 工具函数集合。
+
+```typescript
+import { WebGLUtils } from 'mapjar';
+
+const program = WebGLUtils.createProgram(gl, vertexSource, fragmentSource);
+const texture = WebGLUtils.createTexture(gl, bitmap);
+```
+
+[查看详细文档 →](./utils/webgl-utils)
+
+### TextRenderer
+文字渲染工具。
+
+```typescript
+import { TextRenderer } from 'mapjar';
+
+const textRenderer = new TextRenderer(gl);
+const textureInfo = textRenderer.createTextTexture('Hello World');
+```
+
+[查看详细文档 →](./utils/text-renderer)
+
+### Loader
+资源加载工具。
+
+```typescript
+import { loader } from 'mapjar';
+
+const bitmap = await loader.loadImage('https://example.com/image.png');
+const data = await loader.loadJSON('https://example.com/data.json');
+```
+
+[查看详细文档 →](./utils/loader)
+
+### ResourceManager
+资源管理工具。
+
+```typescript
+import { resourceManager } from 'mapjar';
+
+resourceManager.addTexture('my-texture', texture);
+const texture = resourceManager.getTexture('my-texture');
+```
+
+[查看详细文档 →](./utils/resource-manager)
+
+### BatchRenderer
+批量渲染工具。
+
+```typescript
+import { BatchRenderer } from 'mapjar';
+
+const batchRenderer = new BatchRenderer();
+batchRenderer.addToBatch(feature, style, index);
+```
+
+### FrustumCulling
+视锥剔除工具。
+
+```typescript
+import { FrustumCulling } from 'mapjar';
+
+const visibleFeatures = FrustumCulling.cullFeatures(features, camera);
+```
+
 ## 类型定义
 
 ### MapOptions
@@ -288,3 +355,4 @@ interface VectorStyle {
 - [MapEngine API](./map-engine) - 查看地图引擎的完整 API
 - [Camera API](./camera) - 查看相机系统的完整 API
 - [图层 API](./layers/layer) - 查看图层系统的完整 API
+- [工具类 API](./utils/webgl-utils) - 查看工具函数的完整 API
